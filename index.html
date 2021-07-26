@@ -1,0 +1,803 @@
+<head>
+
+    <style>
+      body {
+        margin: 00;
+      }
+  
+      .modal {
+        overflow: hidden;
+      }
+  
+      .modal-dialog {
+        margin-right: 0;
+        margin-left: 0;
+      }
+  
+      .modal-header {
+        height: 30px;
+        padding: 20px;
+        background-color: #18456b;
+        color: white;
+      }
+  
+      .modal-title {
+        margin-top: -10px;
+        font-size: 16px;
+      }
+  
+      .modal-header .close {
+        margin-top: -10px;
+        color: #fff;
+      }
+  
+      .modal-body {
+        color: #888;
+        padding: 5px 35px 20px;
+      }
+  
+      .modal-body h3 {
+        text-align: center;
+      }
+  
+      .modal-body p {
+        padding-top: 10px;
+        font-size: 1.1em;
+      }
+    </style>
+  
+  
+    <script src="https://unpkg.com/d3-array@3.0.1/dist/d3-array.min.js"></script>
+  
+    <script src="https://unpkg.com/d3-scale@4.0.0/dist/d3-scale.min.js"></script>
+  
+    <script src="https://unpkg.com/globe.gl@2.22.3/dist/globe.gl.min.js"></script>
+  
+    <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
+  
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  
+  
+    <link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css" />
+  
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"></script>
+  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  
+    <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/tween.js/18.6.4/tween.umd.js'></script>
+  
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  
+  
+  
+  
+  
+  
+  
+  
+    <!--<script src="../../dist/globe.gl.js"></script>-->
+    <style>
+      input[type='checkbox']:after {
+        line-height: 1.5em;
+        content: '';
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        border: 1px solid rgb(192, 192, 192);
+        border-radius: 0.25em;
+        background: #fff;
+        margin-top: -4px;
+        margin-left: -4px;
+      }
+  
+      input[type='checkbox']:checked:after {
+        /* content: '✔'; */
+        content: "\f406";
+        color: #0d7963;
+        text-align: center;
+        width: 20px;
+        height: 25px;
+        border: 2px solid black;
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 600;
+      }
+  
+      input[type='checkbox']:disabled:after {
+        /* content: '✔'; */
+        content: "\f406";
+        color: grey;
+        text-align: center;
+        width: 20px;
+        height: 25px;
+        border: 2px solid black;
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 600;
+      }
+  
+      .scene-container {
+  
+        width: 50%;
+      }
+    </style>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+  
+      .wrap {
+        width: 100%;
+        margin: 0 auto;
+      }
+  
+      .header {
+        height: 50px;
+        margin-bottom: 15px;
+        background-color: #0d7963;
+      }
+  
+  
+  
+      .footer {
+        height: 50px;
+        margin-top: 15px;
+        background-color: #0d7963;
+      }
+  
+      .clear {
+        clear: both;
+      }
+    </style>
+    <style>
+      * {
+        font-family: sans-serif;
+        /* Change your font family */
+      }
+  
+      .content-table {
+        border-collapse: collapse;
+        margin: 25px 0;
+        font-size: 0.9em;
+        min-width: 400px;
+        border-radius: 5px 5px 0 0;
+        overflow: auto;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        width: 100%;
+      }
+  
+      .content-table thead tr {
+        background-color: #009879;
+        color: #ffffff;
+        text-align: left;
+        font-weight: bold;
+      }
+  
+      .content-table th,
+      .content-table td {
+        padding: 12px 15px;
+      }
+  
+      .content-table tbody tr {
+        border-bottom: 1px solid #dddddd;
+      }
+  
+      .content-table tbody tr:nth-of-type(even) {
+        background-color: #f3f3f3;
+      }
+  
+      .content-table tbody tr:last-of-type {
+        border-bottom: 2px solid #009879;
+      }
+  
+      .content-table tbody tr.active-row {
+        font-weight: bold;
+        color: #009879;
+      }
+  
+      .cn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    </style>
+  </head>
+  
+  <body>
+  
+    <!-- Modal -->
+    <div id="myModal" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+              style="margin-top : -25px">&times;</button>
+  
+          </div>
+          <div class="modal-body">
+            <h3>Confirm Ticket</h3>
+            <div id="modalBody">Hi,based on your seat selection : <b><span id="seatsSelection"></span></b>
+              <br>Total Cost = <b><span id="totalCostDivision"></span></b>
+              <br>Total Cost = <b><span id="totalCost"></span></b>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button id="loadpage" type="button" class="btn btn-primary">Buy</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+  
+  
+    <div class="wrap">
+  
+      <div class="header" style="position:relative;">
+  
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <a class="navbar-brand" href="#">Navbar</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+  
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+                  Dropdown
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="#">Action</a>
+                  <a class="dropdown-item" href="#">Another action</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="#">Something else here</a>
+                </div>
+              </li>
+  
+              <div class="form-inline float-right">
+                <i class="fas fa-shopping-cart float-right"></i>
+              </div>
+            </ul>
+  
+          </div>
+        </nav>
+      </div><!-- .header -->
+      <div class="row">
+  
+  
+  
+        <div class="col-sm-5">
+          <div class="sidebar" style="position:relative;">
+            <div id="globeViz" style="position:relative;"></div>
+          </div><!-- .sidebar -->
+        </div>
+  
+  
+        <div class="col-sm-7">
+          <div class="content" style="position:relative;">
+  
+  
+  
+            <div style="margin-left: 13%;">
+  
+              <select class="js-location-from mx-2" name="from">
+                <option value="TYC">Tycho crater</option>
+                <option value="COC">Copernicus crater</option>
+              </select>
+  
+              <i class="fas fa-angle-double-right mx-2"></i>
+  
+              <select class="js-location-to" name="to">
+                <option value="TYC">Tycho crater</option>
+                <option value="COC">Copernicus crater</option>
+              </select>
+              <input type="date" class="mx-2"></input>
+              <button type="button" class="btn btn-default" style="background-color: #009879;color: white">Search</button>
+            </div>
+  
+            <div class="row">
+              <div class="col-sm-1 vertcal-central cn">
+                <i class="fas fa-chevron-left prevPage fa-2x"></i>
+              </div>
+              <div class="col-sm-10">
+                <table class="content-table" id="shuttleList">
+                  <thead>
+                    <tr>
+                      <th>Shuttle - <i class="fa fa-rocket"></i></th>
+                      <th>Departure - <i class="fas fa-plane-departure"></i></th>
+                      <th>Duration(hrs)</th>
+                      <th>Arrival - <i class="fas fa-plane-arrival"></i></th>
+                      <th>Cost - <i class="fas fa-dollar-sign"></i></th>
+                    </tr>
+                  </thead>
+                  <tbody id="shuttleListBody">
+                    <!-- <tr>
+                      <td class="company"><input type="radio" name="shuttle" class="shuttle"></input>
+                        ZionWays</td>
+                      <td class="fromPlace" >Tycho crater</td>
+                      <td class="time">50</td>
+                      <td class="toPlace">Copernicus crater</td>
+                      <td class="price">5000</td>
+                    </tr>
+                    <tr id="row2">
+                      <td class="company"><input type="radio" name="shuttle" class="shuttle"></input>
+                        MoonExpress</td>
+                      <td class="fromPlace">Tycho crater</td>
+                      <td class="time">30</td>
+                      <td class="toPlace" >Copernicus crater</td>
+                      <td class="price">8000</td>
+  
+                    </tr>
+                    <tr id="row2">
+                      <td class="company"><input type="radio" name="shuttle" class="shuttle"></input>
+                        MoonExpress</td>
+                      <td class="fromPlace">Tycho crater</td>
+                      <td class="time">30</td>
+                      <td class="toPlace">Copernicus crater</td>
+                      <td class="price">8000</td>
+                    </tr> -->
+                  </tbody>
+                </table>
+  
+              </div>
+              <div class="col-sm-1 cn "> <i class="fas fa-chevron-right nextPage fa-2x"></i></div>
+            </div>
+  
+  
+  
+            <div class="row">
+              <div class="col-sm-1"> </div>
+  
+              <div class="col-sm-10">
+                <table class="content-table" id="shuttleDetails">
+  
+                  <thead>
+                    <tr>
+                      <th colspan="3" style="text-align: center;" id="shuttleDetailsHeader">MoonExpress <i
+                          class="fa fa-rocket"></i></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="height:120px" id="shuttleLogo">Logo</td>
+                      <td style="height:120px;width: 180px;" colspan="2" id="shuttleAbout">About</td>
+  
+                    </tr>
+                    <tr class="active-row">
+                      <td id="shuttleSpeed">Speed</td>
+                      <td id="shuttleLuxury">Luxury</td>
+                      <td id="shuttleReliability">Reliability</td>
+                    </tr>
+                    <tr>
+                      <td style="height:120px" id="shuttleShip">Ship</td>
+                      <td style="height:120px;" colspan="2" id="shuttleSeats">
+                        <table>
+                          <tr style="background-color:white">
+                            <td><input type="checkbox" value="1C" name="seat" checked disabled></td>
+                            <td><input type="checkbox" value="2C" name="seat"></td>
+                            <td><input type="checkbox" value="3C" name="seat"></td>
+                            <td><input type="checkbox" value="4C" name="seat"></td>
+                          </tr>
+                          <tr style="background-color:white">
+                            <td><input type="checkbox" value="1B" name="seat"></td>
+                            <td><input type="checkbox" value="2B" name="seat"></td>
+                            <td><input type="checkbox" value="3B" name="seat" checked disabled></td>
+                            <td><input type="checkbox" value="4B" name="seat"></td>
+                          </tr>
+                          <tr style="background-color:white;border-bottom: none;">
+                            <td><input type="checkbox" value="1A" name="seat"></td>
+                            <td><input type="checkbox" value="2A" name="seat"></td>
+                            <td><input type="checkbox" value="3A" name="seat"></td>
+                            <td><input type="checkbox" value="4A" name="seat" checked disabled></td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr class="active-row">
+                      <td colspan="3" style="text-align: center;"><button type="button"
+                          class="btn btn-success btn-sm mx-2 buy-ticket">Add to Cart</button><button type="button"
+                          class="btn btn-success btn-sm cancel-ticket" href="#myModal" id="buyTkt" data-backdrop="false"
+                          data-toggle="modal">Buy</button></td>
+  
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="col-sm-1"> </div>
+            </div>
+          </div><!-- .content -->
+  
+  
+  
+  
+        </div>
+  
+  
+  
+  
+  
+  
+      </div><!-- .wrap -->
+  
+  
+  
+  
+  
+  
+      <script>
+  
+  
+        const colorScale = d3.scaleOrdinal(['orangered', 'mediumblue', 'darkgreen', 'yellow']);
+  
+        const labelsTopOrientation = new Set(['Apollo 12', 'Luna 2', 'Luna 20', 'Luna 21', 'Luna 24', 'LCROSS Probe']); // avoid label collisions
+  
+        const elem = document.getElementById('globeViz');
+  
+  
+  
+        const N = 1;
+        const name = 'Shuttle';
+        const arcsData = [{
+          startLat: 125,
+          startLng: 120,
+          endLat: 200,
+          endLng: 200
+  
+        }];
+  
+  
+        var moon = Globe()
+  
+          .globeImageUrl("/lunar_surface.jpg")
+          .bumpImageUrl("/lunar_bumpmap.jpg")
+          // .backgroundImageUrl('https://unpkg.com/three-globe@2.18.5/example/img/night-sky.png')
+          .backgroundColor('#FFF')
+          .width([700])
+          .height([600])
+          .arcsData(arcsData)
+          .arcLabel(['<h1 style="visibility:!hidden">Shuttle</h1>'])
+          .arcAltitude([0.3])
+          .arcDashLength(0.01)
+          .arcDashGap(0.9)
+          .arcDashAnimateTime(5000)
+          .showGraticules(false)
+          .showAtmosphere(false) // moon has no atmosphere
+          .labelText('label')
+          .labelSize(1.7)
+          .labelDotRadius(0.4)
+          .labelDotOrientation(d => labelsTopOrientation.has(d.label) ? 'top' : 'bottom')
+          .labelColor(d => colorScale(d.agency))
+          .labelLabel(d => `
+            <div><b>${d.label}</b></div>
+            <img src="/nuclear.png"  width="50" height="50"></img>
+            <div>${d.agency} - ${d.program} Program</div>
+            <div>Landing on <i>${new Date(d.date).toLocaleDateString()}</i></div>
+            <div>Landing on <i>${new Date(d.date).toLocaleDateString()}</i></div>
+          `)
+          .onLabelClick(d => show(d))
+          (elem);
+  
+        fetch("/moon_landings.json").then(r => r.json()).then(landingSites => {
+          moon.labelsData(landingSites);
+        });
+  
+  
+  
+  
+        function show(data) {
+          console.log(data)
+  
+        }
+  
+        var index = 0;
+        var maxLength = 6;
+  
+        $(document).ready(function () {
+  
+  
+          $('.nextPage').click(function () {
+            if (index < maxLength)
+              index++;
+            console.log(index)
+            fillTable(index);
+  
+          });
+  
+          $('.prevPage').click(function () {
+  
+            if (index > 0)
+              index--;
+            console.log(index)
+            fillTable(index);
+  
+          });
+  
+  
+  
+          $('#buyTkt').click(function () {
+  
+  
+  
+            seats = []
+  
+            $('input:checkbox[name=seat]').filter(function () {
+  
+              if (!this.disabled && this.checked)
+                seats.push($(this).val())
+            })
+  
+            var No = seats.length;
+            var price = $('#shuttleListBody tr.active-row td.price').text();
+            console.log(price);
+            document.getElementById("seatsSelection").textContent = seats;
+            document.getElementById("totalCostDivision").textContent = No + "X" + price;
+            document.getElementById("totalCost").textContent = No * price;
+  
+  
+            console.log(seats);
+  
+          });
+  
+          //DatePicker
+  
+  
+  
+          //Select2 Functionality
+          $('.js-location-from').select2();
+          $('.js-location-to').select2();
+  
+          //Buy Ticket modal
+          $('.buy-ticket').click(function () {
+  
+  
+  
+            //Find the selected shuttle
+            var from = $('#shuttleListBody tr.active-row td.fromPlace').text();
+            var to = $('#shuttleListBody tr.active-row td.toPlace').text();
+            var company = $('#shuttleListBody tr.active-row td.company').text().trim();
+            var time = $('#shuttleListBody tr.active-row td.time').text();
+            var price = $('#shuttleListBody tr.active-row td.price').text();
+  
+  
+            console.log(from + ":::" + to + ":::" + company + ":::" + time + ":::" + price);
+  
+            /*var shuttleTable = $('#shuttleListBody tr.active-row');
+            $('#shuttleList tr.active-row').each(function () {
+              $(this).find('td').each(function () {
+                console.log($(this).text().trim())
+                //do your stuff, you can use $(this) to get current cell
+              })
+            })*/
+  
+  
+            console.log("Buy Ticket Information")
+  
+          });
+  
+  
+  
+  
+  
+          $(document).on('change', 'input:radio[name="shuttle"]', function () {
+  
+  
+  
+            //Reset the checkbox
+            $('input[type=checkbox]').prop('checked', false);
+  
+            const renderer = moon.renderer();
+  
+            const scene = moon.scene();
+  
+            const camera = moon.camera()
+  
+            const controls = moon.controls();
+  
+            console.log(renderer);
+            console.log(scene);
+            console.log(camera);
+            console.log(controls);
+  
+  
+  
+  
+            //Removes all the active-row
+            $("#shuttleList tr").removeClass('active-row');
+  
+            //Makes the current one active-row
+            var row = $(this).parent('td').parent('tr');
+            var header = $(this).parent('td').text();
+            row.addClass('active-row');
+  
+  
+            //Display the details of Current Journey
+  
+            var obj = [
+              {
+                "name": "ZionWays",
+                "path": "http://127.0.0.1:5500/globe.gl-master/example/moon-landing-sites/logo/ZionWays.png",
+                "ship": "http://127.0.0.1:5500/globe.gl-master/example/moon-landing-sites/ships/ZW_PS_01.png",
+                "about": "About ZionWays",
+                "speed": 80,
+                "luxury": 75,
+                "reliability": 96,
+                "capacity": 150
+              },
+              {
+                "name": "MoonExpress",
+                "path": "http://127.0.0.1:5500/globe.gl-master/example/moon-landing-sites/logo/moonExpress.png",
+                "ship": "http://127.0.0.1:5500/globe.gl-master/example/moon-landing-sites/ships/ME_PS_01.png",
+                "about": "MoonExpress was a small private Dutch organization which was the first to start commercial transportation of cargo and passengers on Lunar Colony.",
+                "speed": 120,
+                "luxury": 80,
+                "reliability": 98,
+                "capacity": 120
+              },
+              {
+                "name": "MarsOne",
+                "path": "http://127.0.0.1:5500/globe.gl-master/example/moon-landing-sites/logo/MarsOne.png",
+                "ship": "http://127.0.0.1:5500/globe.gl-master/example/moon-landing-sites/ships/MO_CS_01.png",
+                "about": "About MarsOne",
+                "speed": 200,
+                "luxury": 90,
+                "reliability": 99,
+                "capacity": 72
+              }
+  
+            ];
+  
+  
+            $("#shuttleDetailsHeader").html(header);
+  
+            for (var i = 0; i < obj.length; i++) {
+  
+              // look for the entry with a matching `code` value
+              if (obj[i].name == header.trim()) {
+  
+                console.log(obj[i])
+  
+                $("#shuttleLogo").html("<img src='" + obj[i].path + "' height=100 width=100 style='display: block;margin-left: auto;margin-right: auto;'></img>");
+                $("#shuttleAbout").html("<p>" + obj[i].about + "</p>");
+                $("#shuttleSpeed").html(("Speed : " + obj[i].speed + " km/hr"));
+                $("#shuttleLuxury").html("Luxury : " + (obj[i].luxury));
+                $("#shuttleReliability").html("Reliability : " + (obj[i].reliability) + "%");
+                $("#shuttleShip").html("<img src='" + obj[i].ship + "'  style='display: block;margin-left: auto;margin-right: auto;'></img>");
+  
+              }
+            }
+  
+            //Display the animation of Current Journey
+          });
+        });
+  
+        var tableData = [
+          {
+            "shuttle": "ZionWays",
+            "departure": "Tycho Crater",
+            "duration": 50,
+            "arrival": "Copernicus crater",
+            "cost": 5000,
+          },
+          {
+            "shuttle": "MoonExpress",
+            "departure": "Tycho Crater",
+            "duration": 30,
+            "arrival": "Copernicus crater",
+            "cost": 8000,
+          },
+          {
+            "shuttle": "MarsOne",
+            "departure": "Tycho Crater",
+            "duration": 20,
+            "arrival": "Copernicus crater",
+            "cost": 15000,
+          },
+          {
+            "shuttle": "ZionWaysA",
+            "departure": "Tycho Crater",
+            "duration": 50,
+            "arrival": "Copernicus crater",
+            "cost": 5000,
+          },
+          {
+            "shuttle": "MoonExpressA",
+            "departure": "Tycho Crater",
+            "duration": 30,
+            "arrival": "Copernicus crater",
+            "cost": 8000,
+          },
+          {
+            "shuttle": "MarsOneA",
+            "departure": "Tycho Crater",
+            "duration": 20,
+            "arrival": "Copernicus crater",
+            "cost": 15000,
+          },
+          {
+            "shuttle": "MoonExpressA",
+            "departure": "Tycho Crater",
+            "duration": 30,
+            "arrival": "Copernicus crater",
+            "cost": 8000,
+          },
+          {
+            "shuttle": "MarsOneA",
+            "departure": "Tycho Crater",
+            "duration": 20,
+            "arrival": "Copernicus crater",
+            "cost": 15000,
+          }
+  
+        ];
+        var tIndexStart;
+        var tIndexEnd;
+  
+  
+        function fillTable(index) {
+  
+          var length = tableData.length - 1;
+          var increment = 3;
+  
+  
+  
+          if (index * 3 < length)
+            tIndexStart = index * 3
+  
+          tIndexEnd = (tIndexStart + 2) < length ? (tIndexStart + 2) : length
+  
+          console.log(index);
+          console.log(tIndexStart + " - " + tIndexEnd);
+  
+          tableBody = $("#shuttleListBody")
+  
+          tableBody.empty();
+          for (var i = tIndexStart; i <= tIndexEnd; i++) {
+  
+  
+            row = `'<tr><td class="company"><input type="radio" name="shuttle" class="shuttle" ></input> ` + tableData[i].shuttle + `</td>
+              <td class="fromPlace"> `+ tableData[i].departure + ` </td>
+              <td class="time"> `+ tableData[i].duration + ` </td>
+              <td class="toPlace"> `+ tableData[i].arrival + ` </td>
+              <td class="price"> `+ tableData[i].cost + ` </td></tr>'`;
+  
+            tableBody.append(row);
+          }
+        }
+  
+  
+  
+  
+          //Display the animation of Current Journey
+  
+  
+  
+      </script>
+  </body>
